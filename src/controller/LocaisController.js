@@ -80,5 +80,28 @@ export class LocaisController {
       return res.status(500).send();
     }
   }
+
+  async deleteLocais(req, res){
+    const { id } = req.params; 
+    try {
+      const checkLocal = await prismaClient.locais.findFirst({
+        where: {
+          id
+        }
+      });
+      if(!checkLocal){
+        return res.status(409).json("Local não registrado");
+      }
+      
+      await prismaClient.locais.delete({
+        where: {
+          id
+        }
+      });
+      return res.status(200).send();
+    } catch (error) {
+      return res.status(500).send();
+    }
+  }
 }
 
