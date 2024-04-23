@@ -50,5 +50,35 @@ export class LocaisController {
       return res.status(500).send();
     }
   }
+
+  async putLocais(req, res) {
+    const { id } = req.params; 
+    const {nome, CEP, cidade, numero, rua} = req.body;
+    try {
+      const checkLocal = await prismaClient.locais.findFirst({
+        where: {
+          id
+        }
+      });
+      if(!checkLocal){
+        return res.status(409).json("Local não registrado");
+      }
+      const local = await prismaClient.locais.update({
+        where: {
+          id
+        },
+        data: {
+          nome,
+          CEP,
+          cidade,
+          numero,
+          rua
+        }
+      });
+      return res.status(200).json(local);
+    } catch (error) {
+      return res.status(500).send();
+    }
+  }
 }
 
