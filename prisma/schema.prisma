@@ -39,7 +39,10 @@ model Categorias {
 model Locais {
   id       String    @id @default(uuid())
   nome     String
-  endereco String
+  cidade   String
+  CEP      String    @db.Char(9)
+  rua      String
+  numero   Int
   Eventos  Eventos[]
 
   @@map("locais")
