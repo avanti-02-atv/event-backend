@@ -2,42 +2,105 @@ import { prismaClient } from "../database/PrismaClient.js";
 
 
 export class CategoriasController {
-    async findAllCategorias(request, response) {
-        const cat = await prismaClient.categorias.findMany();
-        response.status(200).json(cat)
+    async findAllCategorias(req, res) {
+        try {
+            const cat = await prismaClient.categorias.findMany();
+            res.status(200).json(cat)
+        } catch (error) {
+            return res.status(500).send(); 
+        }     
     }
 
-    async createCategorias(request, response) {
-        const { nome } = request.body;
-        const cat = await prismaClient.categorias.create({
-            data: {
-                nome,
+    async findCategoria(req, res) {
+        const { id } = req.params; 
+        try {
+          const categoria = await prismaClient.categorias.findUnique({
+            where: { id }
+          });
+          return res.status(200).json(categoria);
+        } catch (err) {
+          return res.status(500).send();
+        }
+      }
+
+    async createCategorias(req, res) {
+        const { nome } = req.body;
+        try {
+            const checkCategoria = await prismaClient.categorias.findFirst({
+                where: {
+                  nome
+                }
+            });
+        
+            if (checkCategoria) {
+                return res.status(409).json("Categoria já registrada");
             }
-        });
-        response.status(201).json(cat)
+
+            const cat = await prismaClient.categorias.create({
+                data: {
+                    nome,
+                }
+            });
+
+            res.status(201).json(cat)
+        } catch (error) {
+            return res.status(500).send();
+        }
+        
     }
 
-    async updateCategorias(request, response) {
-        const { id } = request.params;
-        const { nome } = request.body;
-        const cat = await prismaClient.categorias.update({
-            where: {
-                id
-            },
-            data: {
-                nome,
+    async updateCategorias(req, res) {
+        const { id } = req.params;
+        const { nome } = req.body;
+        try {
+            const checkCategoria = await prismaClient.categorias.findFirst({
+                where: {
+                  id
+                }
+            });
+
+            if(!checkCategoria){
+                return res.status(409).json("Categoria não registrada");
             }
-        });
-        response.status(200).json(cat)
+
+            const cat = await prismaClient.categorias.update({
+                where: {
+                    id
+                },
+                data: {
+                    nome,
+                }
+            });
+            res.status(200).json(cat)
+        } catch (error) {
+            return res.status(500).send();
+        }
+    
     }
 
-    async deleteCategorias(request, response) {
-        const { id } = request.params;
-        const cat = await prismaClient.categorias.delete({
-            where: {
-                id
+    async deleteCategorias(req, res) {
+        const { id } = req.params;
+
+        try {
+            const checkCategoria = await prismaClient.categorias.findFirst({
+                where: {
+                    id
+                }
+            });
+        
+            if (!checkCategoria) {
+                return res.status(409).json("Categoria não registrada");
             }
-        });
-        response.status(204).send();
+
+            await prismaClient.categorias.delete({
+                where: {
+                    id
+                }
+            });
+            res.status(200).send();
+        } catch (error) {
+            return res.status(500).send();
+        }
+        
     }
 }
