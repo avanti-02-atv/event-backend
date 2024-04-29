@@ -30,7 +30,7 @@ model Eventos {
 
 model Categorias {
   id      String    @id @default(uuid())
-  nome    String
+  nome    String    @unique
   Eventos Eventos[]
 
   @@map("categorias")
