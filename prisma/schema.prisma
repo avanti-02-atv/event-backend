@@ -30,7 +30,7 @@ model Eventos {
 
 model Categorias {
   id      String    @id @default(uuid())
-  nome    String
+  nome    String    @unique
   Eventos Eventos[]
 
   @@map("categorias")
@@ -39,8 +39,12 @@ model Categorias {
 model Locais {
   id       String    @id @default(uuid())
   nome     String
-  endereco String
+  cidade   String
+  CEP      String    @db.Char(9)
+  rua      String
+  numero   Int
   Eventos  Eventos[]
 
+  @@unique([nome, cidade, CEP, rua, numero])
   @@map("locais")
 }
