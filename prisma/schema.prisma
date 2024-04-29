@@ -45,5 +45,6 @@ model Locais {
   numero   Int
   Eventos  Eventos[]
 
+  @@unique([nome, cidade, CEP, rua, numero])
   @@map("locais")
 }
