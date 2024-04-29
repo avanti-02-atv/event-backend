@@ -1,4 +1,4 @@
-import { prismaClient } from "../database/PrismaClient.js";
+import { prismaClient } from "../database/database.js";
 
 
 export class CategoriasController {

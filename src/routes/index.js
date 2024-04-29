@@ -9,8 +9,8 @@ const routes = Router();
 const categoriasController = new CategoriasController();
 const locaisController = new LocaisController();
 
-routes.get("/categorias",           categoriasController.findAllCategorias);
-routes.get("/categorias/:id",       categoriasController.findCategoria);
+routes.get("/categorias",          categoriasController.findAllCategorias);
+routes.get("/categorias/:id",      categoriasController.findCategoria);
 routes.post("/categorias",         categoriasController.createCategorias);
 routes.put("/categorias/:id",      categoriasController.updateCategorias);
 routes.delete("/categorias/:id",   categoriasController.deleteCategorias);
