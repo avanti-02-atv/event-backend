@@ -4,6 +4,7 @@ import { CategoriasController } from "../controller/CategoriasController.js";
 import { LocaisController } from "../controller/LocaisController.js";
 import { EventosController } from "../controller/EventosController.js";
 import { UserController } from "../controller/UserController.js";
+import { LoginController } from "../controller/LoginController.js";
 
 
 const routes = Router();
@@ -12,7 +13,9 @@ const categoriasController = new CategoriasController();
 const locaisController = new LocaisController();
 const eventosController = new EventosController();
 const userController = new UserController();
+const loginController = new LoginController();
 
+routes.post("/login", loginController.sign);
 
 routes.get("/users",              userController.getAllUser);
 routes.get("/user/:id",           userController.getUser);
