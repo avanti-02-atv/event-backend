@@ -96,4 +96,27 @@ export class UserController {
     }
   }
 
+  async deleteUser(req, res){
+    const { id } = req.params; 
+    try {
+      const checkUser = await prismaClient.user.findFirst({
+        where: {
+          id
+        }
+      });
+      if(!checkUser){
+        return res.status(409).json("User não registrado");
+      }
+      
+      await prismaClient.user.delete({
+        where: {
+          id
+        }
+      });
+      return res.status(200).send();
+    } catch (error) {
+      return res.status(500).send();
+    }
+  }
+
 }
