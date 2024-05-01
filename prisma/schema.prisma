@@ -55,7 +55,7 @@ model User {
   email       String @unique
   phone       String
   password    String 
-  role        String @default("PARTICIPANTE")  
+  isOrganizer Boolean
 
   @@map("user")
 }

@@ -1,3 +1,6 @@
+import { prismaClient } from "../database/database.js";
+import bcrypt from "bcryptjs"
+
 export class UserController {
   async getUser(req, res) {
     const { id } = req.params; 
@@ -20,6 +23,43 @@ export class UserController {
       return res.status(200).json(users);
     } catch (err) {
       return res.status(500).send();
+    }
+  }
+
+  async createUser (req, res) {
+    const { name, email, phone, password, isOrganizer } = req.body;
+    try {
+        const userCheck = await prismaClient.user.findFirst({
+            where:{
+                email: email
+            }
+        });
+
+        if (userCheck) {
+            return response.status(409).json("E-mail already registered");
+        }
+
+        const passwordHash = bcrypt.hashSync(password, 10);
+
+        const user = await prismaClient.user.create({
+            data: {
+                name,
+                email,
+                phone,
+                password: passwordHash,
+                isOrganizer
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                phone: true,
+                isOrganizer: true
+            }
+        });
+        return res.status(201).json(user);
+    } catch (error) {
+        return res.status(500).send();
     }
   }
 }

@@ -3,6 +3,7 @@ import { Router } from "express";
 import { CategoriasController } from "../controller/CategoriasController.js";
 import { LocaisController } from "../controller/LocaisController.js";
 import { EventosController } from "../controller/EventosController.js";
+import { UserController } from "../controller/UserController.js";
 
 
 const routes = Router();
@@ -10,6 +11,12 @@ const routes = Router();
 const categoriasController = new CategoriasController();
 const locaisController = new LocaisController();
 const eventosController = new EventosController();
+const userController = new UserController();
+
+
+routes.get("/users",              userController.getAllUser);
+routes.get("/user/:id",           userController.getUser);
+routes.post("/user",              userController.createUser);
 
 routes.get("/eventos",            eventosController.getAllEventos);
 routes.get("/evento/:id",         eventosController.getEvento);
