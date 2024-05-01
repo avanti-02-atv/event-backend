@@ -17,6 +17,7 @@ const userController = new UserController();
 routes.get("/users",              userController.getAllUser);
 routes.get("/user/:id",           userController.getUser);
 routes.post("/user",              userController.createUser);
+routes.put("/user/:id",           userController.putUser);
 
 routes.get("/eventos",            eventosController.getAllEventos);
 routes.get("/evento/:id",         eventosController.getEvento);

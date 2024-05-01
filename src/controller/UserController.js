@@ -62,4 +62,38 @@ export class UserController {
         return res.status(500).send();
     }
   }
+
+  async putUser(req, res) {
+    const { id } = req.params; 
+    const {name, email, phone, password, isOrganizer} = req.body;
+    try {
+      const checkUser = await prismaClient.user.findFirst({
+        where: {
+          id
+        }
+      });
+      if(!checkUser){
+        return res.status(409).json("User não registrado");
+      }
+
+      const passwordHash = bcrypt.hashSync(password, 10);
+
+      const user = await prismaClient.user.update({
+        where: {
+          id
+        },
+        data: {
+          name,
+          email,
+          phone,
+          password: passwordHash,
+          isOrganizer
+        }
+      });
+      return res.status(200).json(user);
+    } catch (error) {
+      return res.status(500).send();
+    }
+  }
+
 }
