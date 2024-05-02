@@ -29,7 +29,7 @@ Siga os passos abaixo para executar a aplicação:
    ```
    localhost:3000
    ```
-Após exucutar o projeto, acesse o endereço http://localhost:3000/api-docs, para acessar o swagger da aplicação com as rotas da API.
+Após executar o projeto, acesse o endereço http://localhost:3000/api-docs, para acessar o swagger da aplicação com as rotas da API.
 
 ## Ferramentas Utilizadas
 
