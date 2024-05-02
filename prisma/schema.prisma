@@ -48,3 +48,14 @@ model Locais {
   @@unique([nome, cidade, CEP, rua, numero])
   @@map("locais")
 }
+
+model User {
+  id          String @id @default(uuid())
+  name        String
+  email       String @unique
+  phone       String
+  password    String 
+  isOrganizer Boolean
+
+  @@map("user")
+}
