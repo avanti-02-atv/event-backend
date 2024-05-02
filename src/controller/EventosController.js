@@ -134,4 +134,63 @@ export class EventosController {
       return res.status(500).send();
     }
   }
+
+  async search(req, res) {
+    try {
+      const { evento, categoria, local, dataInicio, dataFim } = req.query;
+  
+      let whereClause = {};
+      
+      if (evento) {
+        whereClause = { ...whereClause, nome: {contains: evento} };
+      }
+      if (categoria) {
+        whereClause = { ...whereClause, Categoria: { nome: categoria } };
+      }
+      if (local) {
+        whereClause = { ...whereClause, Local: { nome: local } };
+      }
+      if (dataInicio || dataFim) {
+        if(dataInicio && dataFim){
+          whereClause = { 
+            ...whereClause, 
+            data: { 
+              gte: new Date(dataInicio),
+              lte: new Date(dataFim)
+            } 
+          };
+        }
+        if(dataInicio){
+          whereClause = { 
+            ...whereClause, 
+            data: { 
+              gte: new Date(dataInicio)
+            } 
+          };
+        }
+
+        if(dataFim){
+          whereClause = { 
+            ...whereClause, 
+            data: { 
+              lte: new Date(dataFim)
+            } 
+          };
+        }
+      }
+  
+      const eventos = await prismaClient.eventos.findMany({
+        where: whereClause,
+        include: {
+          Categoria: true,
+          Local: true,
+        },
+      });
+  
+      res.json(eventos);
+    } catch (error) {
+      console.error('Erro ao buscar eventos:', error);
+      res.status(500).json({ error: 'Erro ao buscar eventos' });
+    }
+  }
 }
