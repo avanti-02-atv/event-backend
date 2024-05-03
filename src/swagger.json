@@ -1,0 +1,278 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de uma Plataforma de Gerenciamento de Eventos Culturais",
+        "description": "Essa API tem como objetivo a manipulação de dados de uma plataforma de gerenciamento de eventos culturais.",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "email": "thierryfulgencio@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000/v1",
+            "description": "API de teste"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Categorias",
+            "description": "Operações relacionadas às categorias dos eventos culturais na plataforma."
+        }
+    ],
+    "paths": {
+        "/categoria": {
+            "post": {
+                "summary": "Cadastro de categoria",
+                "description": "Essa rota é responsável por cadastrar uma nova categoria na plataforma.",
+                "tags": [
+                    "Categorias"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Categoria"
+                            },
+                            "examples": {
+                                "categoria": {
+                                    "value": {
+                                        "nome": "Cinema Cultural"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Erro na autenticação."
+                    },
+                    "400": {
+                        "description": "Categoria já cadastrada."
+                    },
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Categoria"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao criar categoria"
+                    }
+                }
+            }
+        },
+        "/categorias": {
+            "get": {
+                "summary": "Buscar todas as categorias",
+                "description": "Essa rota é responsável por buscar todas as categorias na plataforma.",
+                "tags": [
+                    "Categorias"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Categoria"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Nenhuma categoria encontrada"
+                    },
+                    "500": {
+                        "description": "Erro ao buscar categorias"
+                    }
+                }
+            }
+        },
+        "/categoria/{id}": {
+            "get": {
+                "summary": "Buscar categoria por ID",
+                "description": "Essa rota é responsável por buscar uma categoria na plataforma.",
+                "tags": [
+                    "Categorias"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Categoria"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categoria não encontrada"
+                    },
+                    "500": {
+                        "description": "Erro ao buscar categoria"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Atualizar categoria por ID",
+                "description": "Essa rota é responsável por atualizar uma categoria na plataforma pelo seu ID.",
+                "tags": [
+                    "Categorias"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Categoria"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Categoria"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categoria não encontrada"
+                    },
+                    "500": {
+                        "description": "Erro ao atualizar categoria"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Deletar categoria por ID",
+                "description": "Essa rota é responsável por deletar uma categoria na plataforma pelo seu ID.",
+                "tags": [
+                    "Categorias"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categoria não encontrada"
+                    },
+                    "500": {
+                        "description": "Erro ao deletar categoria"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Categoria": {
+                "type": "object",
+                "properties": {
+                    "nome": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "nome"
+                ]
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
