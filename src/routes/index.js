@@ -28,8 +28,8 @@ routes.delete("/user/:id",       authenticate,   userController.deleteUser);
 routes.get("/search",            authenticate,   eventosController.search);
 routes.get("/eventos",           authorization,  eventosController.getAllEventos);
 routes.get("/evento/:id",        authorization,  eventosController.getEvento);
-routes.post("/evento",           authorization,  eventosController.postEvento);
-routes.put("/evento/:id",        authorization,  eventosController.putEvento);
+routes.post("/evento",           authorization,  eventosController.createEvento);
+routes.put("/evento/:id",        authorization,  eventosController.updateEvento);
 routes.delete("/evento/:id",     authorization,  eventosController.deleteEvento);
 
 routes.get("/categorias",        authorization,  categoriasController.findAllCategorias);

@@ -4,145 +4,170 @@ import moment from "moment-timezone";
 export class EventosController {
   async getAllEventos(req, res) {
     try {
-      let eventos = await prismaClient.eventos.findMany();
-      eventos = eventos.map((evento) => {
-        const datetime = moment(evento.data);
-        return {
-          ...evento,
-          data: datetime.format("DD-MM-YYYY"),
-          hora: datetime.format("HH:mm:ss"),
-        };
+      const eventos = await prismaClient.eventos.findMany({
+        include: {
+          Categoria: true,
+          Local: true,
+        },
       });
+
+      if (eventos.length === 0) {
+        return res.status(404).json({ message: "Nenhum evento encontrado" });
+      }
+
       return res.status(200).json(eventos);
     } catch (err) {
-      console.error("Error retrieving eventos:", err);
-      return res.status(500).send();
+      return res
+        .status(500)
+        .json({ message: `Erro ao buscar eventos: ${err.message}` });
     }
   }
 
   async getEvento(req, res) {
     const { id } = req.params;
     try {
-      let evento = await prismaClient.eventos.findUnique({
+      const evento = await prismaClient.eventos.findUnique({
         where: { id },
+        include: {
+          Categoria: true,
+          Local: true,
+        },
       });
-      if (evento) {
-        const datetime = moment(evento.data);
-        evento = {
-          ...evento,
-          data: datetime.format("DD-MM-YYYY"),
-          hora: datetime.format("HH:mm:ss"),
-        };
+
+      if (!evento) {
+        return res.status(404).json({ message: "Evento não encontrado" });
       }
+
       return res.status(200).json(evento);
     } catch (err) {
-      console.error("Error retrieving evento:", err);
-      return res.status(500).send();
+      return res
+        .status(500)
+        .json({ message: `Erro ao buscar evento: ${err.message}` });
     }
   }
 
-  async postEvento(req, res) {
-    let { nome, data, hora, localId, descricao, categoriaId } = req.body;
+  async createEvento(req, res) {
+    const { nome, descricao, data, categoriaId, localId } = req.body;
 
-    const datetime = moment.tz(
-      `${data}T${hora}`,
-      "DD-MM-YYYYTHH:mm:ss",
-      "America/Sao_Paulo"
-    );
+    if (!nome || !descricao || !data || !categoriaId || !localId) {
+      return res.status(400).json({ message: "Campos obrigatórios ausentes" });
+    }
 
-    data = datetime.toISOString();
     try {
       const checkEvento = await prismaClient.eventos.findFirst({
         where: {
           nome,
           descricao,
-          data,
+          data: new Date(data),
           categoriaId,
           localId,
         },
       });
 
       if (checkEvento) {
-        return res.status(409).json("Evento já registrado");
+        return res.status(400).json({ message: "Evento já registrado" });
       }
 
-      const evento = await prismaClient.eventos.create({
+      const dataBrasilia = moment(data).tz("America/Sao_Paulo").format();
+      const newEvento = await prismaClient.eventos.create({
         data: {
           nome,
           descricao,
-          data,
+          data: new Date(dataBrasilia),
           categoriaId,
           localId,
         },
       });
-      return res.status(201).json(evento);
-    } catch (error) {
-      console.error("Error creating evento:", error);
-      return res.status(500).send();
+      return res.status(201).json(newEvento);
+    } catch (err) {
+      console.error("Erro ao criar evento:", err);
+      return res
+        .status(500)
+        .json({ message: `Erro ao criar evento: ${err.message}` });
     }
   }
 
-  async putEvento(req, res) {
+  async updateEvento(req, res) {
     const { id } = req.params;
-    let { nome, data, hora, localId, descricao, categoriaId } = req.body;
-
-    const datetime = moment.tz(
-      `${data}T${hora}`,
-      "DD-MM-YYYYTHH:mm:ss",
-      "America/Sao_Paulo"
-    );
-
-    data = datetime.toISOString();
-
+    const { nome, descricao, data, categoriaId, localId } = req.body;
     try {
-      let evento = await prismaClient.eventos.update({
-        where: { id },
+      const checkEvento = await prismaClient.eventos.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      if (!checkEvento) {
+        return res.status(404).json({ message: "Evento não encontrado" });
+      }
+
+      const evento = await prismaClient.eventos.update({
+        where: {
+          id,
+        },
         data: {
           nome,
           descricao,
-          data,
+          data: new Date(data),
           categoriaId,
           localId,
         },
       });
-
-      if (evento) {
-        const datetime = moment(evento.data);
-        evento = {
-          ...evento,
-          data: datetime.format("DD-MM-YYYY"),
-          hora: datetime.format("HH:mm:ss"),
-        };
-      }
 
       return res.status(200).json(evento);
-    } catch (error) {
-      console.error("Error updating evento:", error);
-      return res.status(500).send();
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ message: `Erro ao atualizar evento: ${err.message}` });
     }
   }
-  
+
   async deleteEvento(req, res) {
     const { id } = req.params;
+
     try {
-      const evento = await prismaClient.eventos.delete({
-        where: { id },
+      const evento = await prismaClient.eventos.findFirst({
+        where: {
+          id,
+        },
       });
-      return res.status(200).json(evento);
+
+      if (!evento) {
+        return res.status(404).json({ message: "Evento não encontrado" });
+      }
+
+      await prismaClient.eventos.delete({
+        where: {
+          id,
+        },
+      });
+
+      const deletedEvento = await prismaClient.eventos.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      if (deletedEvento) {
+        return res.status(500).json({ message: "Erro ao deletar evento" });
+      }
+
+      return res.status(200).json({ message: "Evento deletado com sucesso" });
     } catch (error) {
-      console.error("Error deleting evento:", error);
-      return res.status(500).send();
+      return res
+        .status(500)
+        .json({ message: `Erro ao deletar evento: ${error.message}` });
     }
   }
 
   async search(req, res) {
     try {
       const { evento, categoria, local, dataInicio, dataFim } = req.query;
-  
+
       let whereClause = {};
-      
+
       if (evento) {
-        whereClause = { ...whereClause, nome: {contains: evento} };
+        whereClause = { ...whereClause, nome: { contains: evento } };
       }
       if (categoria) {
         whereClause = { ...whereClause, Categoria: { nome: categoria } };
@@ -151,46 +176,28 @@ export class EventosController {
         whereClause = { ...whereClause, Local: { nome: local } };
       }
       if (dataInicio || dataFim) {
-        if(dataInicio && dataFim){
-          whereClause = { 
-            ...whereClause, 
-            data: { 
-              gte: new Date(dataInicio),
-              lte: new Date(dataFim)
-            } 
-          };
-        }
-        if(dataInicio){
-          whereClause = { 
-            ...whereClause, 
-            data: { 
-              gte: new Date(dataInicio)
-            } 
-          };
-        }
-
-        if(dataFim){
-          whereClause = { 
-            ...whereClause, 
-            data: { 
-              lte: new Date(dataFim)
-            } 
-          };
-        }
+        whereClause = {
+          ...whereClause,
+          data: {
+            ...(dataInicio && { gte: new Date(dataInicio) }),
+            ...(dataFim && { lte: new Date(dataFim) }),
+          },
+        };
       }
-  
+
       const eventos = await prismaClient.eventos.findMany({
         where: whereClause,
-        include: {
-          Categoria: true,
-          Local: true,
-        },
       });
-  
-      res.json(eventos);
+
+      if (eventos.length === 0) {
+        return res.status(404).json({ message: "Nenhum evento encontrado." });
+      }
+
+      return res.status(200).json(eventos);
     } catch (error) {
-      console.error('Erro ao buscar eventos:', error);
-      res.status(500).json({ error: 'Erro ao buscar eventos' });
+      return res
+        .status(500)
+        .json({ message: `Erro ao buscar eventos: ${error.message}` });
     }
   }
 }

@@ -483,6 +483,347 @@
                     }
                 }
             }
+        },
+        "/evento": {
+            "post": {
+                "summary": "Cadastro de Evento",
+                "description": "Essa rota é responsável por cadastrar um novo evento na plataforma.",
+                "tags": [
+                    "Eventos"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Evento"
+                            },
+                            "examples": {
+                                "evento": {
+                                    "value": {
+                                        "nome": "Cinema na Praça",
+                                        "descricao": "Filme de comédia",
+                                        "data": "2022-12-10T19:00:00.000Z",
+                                        "categoriaId": "a0a0a0a0aa0a0a0a0a",
+                                        "localId": "a0a0a0a0a0a0aa0a0a"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Erro na autenticação."
+                    },
+                    "400": {
+                        "description": "Evento já cadastrado."
+                    },
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Evento"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao criar evento"
+                    }
+                }
+            }
+        },
+        "/eventos": {
+            "get": {
+                "summary": "Buscar todos os eventos",
+                "description": "Essa rota é responsável por buscar todos os eventos na plataforma.",
+                "tags": [
+                    "Eventos"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Erro na autenticação."
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Evento"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Nenhum evento encontrado"
+                    },
+                    "500": {
+                        "description": "Erro ao buscar eventos"
+                    }
+                }
+            }
+        },
+        "/evento/{id}": {
+            "get": {
+                "summary": "Buscar evento por ID",
+                "description": "Essa rota é responsável por buscar um evento na plataforma.",
+                "tags": [
+                    "Eventos"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do evento",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Erro na autenticação."
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Evento"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Evento não encontrado"
+                    },
+                    "500": {
+                        "description": "Erro ao buscar evento"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Atualização de Evento",
+                "description": "Essa rota é responsável por atualizar um evento existente na plataforma.",
+                "tags": [
+                    "Eventos"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID do evento a ser atualizado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Evento"
+                            },
+                            "examples": {
+                                "evento": {
+                                    "value": {
+                                        "nome": "Cinema na Praça",
+                                        "descricao": "Filme de comédia",
+                                        "data": "2022-12-10T19:00:00.000Z",
+                                        "categoriaId": "a0a0a0a0aa0a0a0a0a",
+                                        "localId": "a0a0a0a0a0a0aa0a0a"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Erro na autenticação."
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Evento"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Evento não encontrado"
+                    },
+                    "500": {
+                        "description": "Erro ao atualizar evento"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Deletar evento por ID",
+                "description": "Essa rota é responsável por deletar um evento na plataforma pelo seu ID.",
+                "tags": [
+                    "Eventos"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do evento",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Erro na autenticação."
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Evento não encontrado"
+                    },
+                    "500": {
+                        "description": "Erro ao deletar evento"
+                    }
+                }
+            }
+        },
+        "/search": {
+            "get": {
+                "summary": "Buscar eventos",
+                "description": "Essa rota é responsável por buscar eventos na plataforma com base em vários critérios.",
+                "tags": [
+                    "Eventos"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "evento",
+                        "in": "query",
+                        "description": "Nome do evento",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "categoria",
+                        "in": "query",
+                        "description": "Nome da categoria",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "local",
+                        "in": "query",
+                        "description": "Nome do local",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dataInicio",
+                        "in": "query",
+                        "description": "Data de início do intervalo de busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "name": "dataFim",
+                        "in": "query",
+                        "description": "Data de fim do intervalo de busca",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Erro na autenticação."
+                    },
+                    "404": {
+                        "description": "Evento não encontrado"
+                    },
+                    "200": {
+                        "description": "Uma lista de eventos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Evento"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar eventos"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -529,6 +870,45 @@
                     "cidade",
                     "rua",
                     "numero"
+                ]
+            },
+            "Evento": {
+                "type": "object",
+                "properties": {
+                    "nome": {
+                        "type": "string"
+                    },
+                    "descricao": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "string"
+                    },
+                    "hora": {
+                        "type": "string"
+                    },
+                    "categoriaId": {
+                        "type": "string"
+                    },
+                    "localId": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "string"
+                    },
+                    "Categoria": {
+                        "$ref": "#/components/schemas/Categoria"
+                    },
+                    "Local": {
+                        "$ref": "#/components/schemas/Local"
+                    }
+                },
+                "required": [
+                    "nome",
+                    "descricao",
+                    "date",
+                    "categoriaId",
+                    "localId"
                 ]
             }
         },
