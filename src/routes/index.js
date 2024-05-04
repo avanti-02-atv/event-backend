@@ -19,7 +19,7 @@ const loginController = new LoginController();
 
 routes.post("/login",                            loginController.sign);
 
-routes.get("/users",             authorization,  userController.getAllUser);
+routes.get("/users",             authorization,  userController.getAllUsers);
 routes.get("/user/:id",          authorization,  userController.getUser);
 routes.post("/user",                             userController.createUser);
 routes.put("/user/:id",          authenticate,   userController.putUser);
