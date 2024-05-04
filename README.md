@@ -33,7 +33,7 @@ Após executar o projeto, acesse o endereço http://localhost:3000/api-docs, par
 
 ## Ferramentas Utilizadas
 
-- **Tecnologias:** Express, Prisma, JWT.
+- **Tecnologias:** Express, Prisma, JWT, Swagger.
 - **Banco de Dados:** PostegresSQL.
 - **Desenvolvimento:** VS Code.
 
