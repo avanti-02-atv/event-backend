@@ -16,7 +16,8 @@
     "bcryptjs": "^2.4.3",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
-    "moment-timezone": "^0.5.45"
+    "moment-timezone": "^0.5.45",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "prisma": "^5.12.1"
