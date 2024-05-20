@@ -35,9 +35,9 @@ export class UserController {
   }
 
   async createUser(req, res) {
-    const { name, email, phone, password, isOrganizer } = req.body;
+    const { name, email, phone, password } = req.body;
 
-    if (!name || !email || !phone || !password || isOrganizer === undefined) {
+    if (!name || !email || !phone || !password) {
       return res.status(400).json({ message: "Campos obrigatórios ausentes" });
     }
 
@@ -68,7 +68,6 @@ export class UserController {
           email,
           phone,
           password: passwordHash,
-          isOrganizer,
         },
         select: {
           id: true,

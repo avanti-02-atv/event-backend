@@ -55,7 +55,7 @@ model User {
   email       String @unique
   phone       String
   password    String 
-  isOrganizer Boolean
+  isOrganizer Boolean @default(false)
 
   @@map("user")
 }
