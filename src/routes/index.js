@@ -26,20 +26,20 @@ routes.put("/user/:id",          authenticate,   userController.putUser);
 routes.delete("/user/:id",       authenticate,   userController.deleteUser);
 
 routes.get("/search",            authenticate,   eventosController.search);
-routes.get("/eventos",           authorization,  eventosController.getAllEventos);
-routes.get("/evento/:id",        authorization,  eventosController.getEvento);
+routes.get("/eventos",           authenticate,  eventosController.getAllEventos);
+routes.get("/evento/:id",        authenticate,  eventosController.getEvento);
 routes.post("/evento",           authorization,  eventosController.createEvento);
 routes.put("/evento/:id",        authorization,  eventosController.updateEvento);
 routes.delete("/evento/:id",     authorization,  eventosController.deleteEvento);
 
-routes.get("/categorias",        authorization,  categoriasController.findAllCategorias);
-routes.get("/categoria/:id",     authorization,  categoriasController.findCategoria);
+routes.get("/categorias",        authenticate,  categoriasController.findAllCategorias);
+routes.get("/categoria/:id",     authenticate,  categoriasController.findCategoria);
 routes.post("/categoria",        authorization,  categoriasController.createCategorias);
 routes.put("/categoria/:id",     authorization,  categoriasController.updateCategorias);
 routes.delete("/categoria/:id",  authorization,  categoriasController.deleteCategorias);
 
-routes.get("/locais",            authorization,  locaisController.getAllLocais);
-routes.get("/local/:id",         authorization,  locaisController.getLocal);
+routes.get("/locais",            authenticate,  locaisController.getAllLocais);
+routes.get("/local/:id",         authenticate,  locaisController.getLocal);
 routes.post("/local",            authorization,  locaisController.postLocais);
 routes.put("/local/:id",         authorization,  locaisController.putLocais);
 routes.delete("/local/:id",      authorization,  locaisController.deleteLocais);
