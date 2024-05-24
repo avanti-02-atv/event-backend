@@ -108,7 +108,7 @@ export class EventosController {
         data: {
           nome,
           descricao,
-          data: new Date(data),
+          data: new Date(data), 
           categoriaId,
           localId,
         },
@@ -160,34 +160,31 @@ export class EventosController {
     }
   }
 
-  async search(req, res) {
-    try {
-      const { evento, categoria, local, dataInicio, dataFim } = req.query;
+async search(req, res) {
+  try {
+    const { evento, categoria, local, data } = req.query;
 
-      let whereClause = {};
+    let whereClause = {};
 
-      if (evento) {
-        whereClause = { ...whereClause, nome: { contains: evento } };
-      }
-      if (categoria) {
-        whereClause = { ...whereClause, Categoria: { nome: categoria } };
-      }
-      if (local) {
-        whereClause = { ...whereClause, Local: { nome: local } };
-      }
-      if (dataInicio || dataFim) {
-        whereClause = {
-          ...whereClause,
-          data: {
-            ...(dataInicio && { gte: new Date(dataInicio) }),
-            ...(dataFim && { lte: new Date(dataFim) }),
-          },
-        };
-      }
+    if (evento) {
+      whereClause = { ...whereClause, nome: { contains: evento } };
+    }
+    if (categoria) {
+      whereClause = { ...whereClause, Categoria: { nome: categoria } };
+    }
+    if (local) {
+      whereClause = { ...whereClause, Local: { nome: local } };
+    }
+    if (data) {
+      whereClause = {
+        ...whereClause,
+        data: new Date(data),
+      };
+    }
 
-      const eventos = await prismaClient.eventos.findMany({
-        where: whereClause,
-      });
+    const eventos = await prismaClient.eventos.findMany({
+      where: whereClause,
+    });
 
       if (eventos.length === 0) {
         return res.status(404).json({ message: "Nenhum evento encontrado." });
