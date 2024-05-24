@@ -178,12 +178,18 @@ async search(req, res) {
     if (data) {
       whereClause = {
         ...whereClause,
-        data: new Date(data),
+        data: {
+          lte: new Date(data),
+        },
       };
     }
 
     const eventos = await prismaClient.eventos.findMany({
       where: whereClause,
+      include: {
+        Categoria: true,
+        Local: true,
+      },
     });
 
       if (eventos.length === 0) {
