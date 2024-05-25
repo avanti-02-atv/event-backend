@@ -25,8 +25,8 @@ routes.post("/user",                             userController.createUser);
 routes.put("/user/:id",          authenticate,   userController.putUser);
 routes.delete("/user/:id",       authenticate,   userController.deleteUser);
 
-routes.get("/search",               eventosController.search);
-routes.get("/eventos",           authenticate,  eventosController.getAllEventos);
+routes.get("/search",                           eventosController.search);
+routes.get("/eventos",                          eventosController.getAllEventos);
 routes.get("/evento/:id",        authenticate,  eventosController.getEvento);
 routes.post("/evento",           authorization,  eventosController.createEvento);
 routes.put("/evento/:id",        authorization,  eventosController.updateEvento);
